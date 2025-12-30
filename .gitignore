@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.py[cod]
+.DS_Store
+acl_figures/   # Optional: Ignore if you want users to generate their own plots

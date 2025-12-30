@@ -2,8 +2,6 @@ import pandas as pd
 import time
 import os
 from tqdm import tqdm
-
-# --- IMPORTS FROM YOUR SRC FOLDER ---
 from src.config import INPUT_FILE, OUTPUT_FILE, MODELS
 from src.llm_client import get_gpt5_response, get_gemini3_response, get_claude45_response
 from src.judge import grade_response_api
@@ -15,7 +13,7 @@ def run_generation_phase():
     """
     Reads the prompts and generates responses from all models.
     """
-    print(f"\n🚀 STARTING PHASE 1: GENERATION")
+    print(f"\n STARTING PHASE 1: GENERATION")
     
     # 1. Load Prompts
     try:
@@ -69,14 +67,11 @@ def run_generation_phase():
     print(f"✓ Generation Complete. Saved to {OUTPUT_FILE}")
     return True
 
-# ==========================================
-# PHASE 2: GRADING
-# ==========================================
 def run_grading_phase():
     """
     Reads the GENERATED file and grades the responses.
     """
-    print(f"\n🚀 STARTING PHASE 2: GRADING")
+    print(f"\n STARTING PHASE 2: GRADING")
 
     # 1. Load the Output File (The one we just generated)
     try:
@@ -155,9 +150,6 @@ def run_grading_phase():
     print(f"✓ Grading Phase Complete. Data updated in {OUTPUT_FILE}")
     return True
 
-# ==========================================
-# MAIN EXECUTION
-# ==========================================
 if __name__ == "__main__":
     # This block allows you to run the whole pipeline
     print("="*60)
@@ -171,4 +163,5 @@ if __name__ == "__main__":
     if success_gen:
         run_grading_phase()
         
-    print("\n✅ Pipeline Finished.")
+
+    print("\n Pipeline Finished.")

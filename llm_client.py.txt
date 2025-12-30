@@ -1,0 +1,52 @@
+import google.generativeai as genai
+from openai import OpenAI
+from anthropic import Anthropic
+from src.config import OPENAI_KEY, GEMINI_KEY, CLAUDE_KEY, MODELS
+
+# Initialize Clients
+openai_client = OpenAI(api_key=OPENAI_KEY)
+anthropic_client = Anthropic(api_key=CLAUDE_KEY)
+if GEMINI_KEY:
+    genai.configure(api_key=GEMINI_KEY)
+
+def get_gpt5_response(prompt):
+    """Generates response using OpenAI GPT-5.1"""
+    try:
+        response = openai_client.chat.completions.create(
+            model=MODELS["OpenAI"],
+            messages=[{"role": "user", "content": str(prompt)}],
+            temperature=1.0,
+            max_completion_tokens=4096
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"[GPT-5.1 ERROR]: {str(e)}"
+
+def get_gemini3_response(prompt):
+    """Generates response using Google Gemini 3.0 Pro"""
+    try:
+        model = genai.GenerativeModel(MODELS["Gemini"])
+        # Gemini 3.0 often handles 'thinking' implicitly, but we set standard config
+        response = model.generate_content(
+            str(prompt),
+            generation_config=genai.types.GenerationConfig(
+                temperature=1.0,
+                max_output_tokens=4096
+            )
+        )
+        return response.text
+    except Exception as e:
+        return f"[GEMINI-3 ERROR]: {str(e)}"
+
+def get_claude45_response(prompt):
+    """Generates response using Anthropic Claude 4.5 Opus"""
+    try:
+        message = anthropic_client.messages.create(
+            model=MODELS["Claude"],
+            max_tokens=4096,
+            temperature=1.0,
+            messages=[{"role": "user", "content": str(prompt)}]
+        )
+        return message.content[0].text
+    except Exception as e:
+        return f"[CLAUDE-4.5 ERROR]: {str(e)}"
